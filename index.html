@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Mr.Xedra</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+header {
+    background: url('https://images.unsplash.com/photo-1522202224507-87c7161e9290?auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+    background-size: cover;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+header h1 { font-size: 2.5em; }
+
+nav {
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: center;
+}
+nav a {
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+nav a:hover { background-color: #4CAF50; border-radius: 5px; }
+
+main {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.card h2 { margin-bottom: 15px; color: #4CAF50; }
+
+.card button {
+    padding: 10px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 18px;
+}
+.card button:hover { background-color: #45a049; transform: scale(1.05); }
+
+.card a button {
+    display: inline-block;
+}
+
+footer { text-align: center; padding: 15px; background-color: #1e1e1e; color: white; }
+
+/* Emoji terbang */
+.flying-emoji {
+    position: absolute;
+    font-size: 2em;
+    pointer-events: none;
+    animation: flyUp 1.5s ease-out forwards;
+}
+
+@keyframes flyUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    50% { transform: translateY(-50px) scale(1.2); opacity: 0.8; }
+    100% { transform: translateY(-150px) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Website Mr.Xedra</h1>
+</header>
+
+<nav>
+    <a data-page="home">Home</a>
+    <a data-page="about">Tentang</a>
+    <a data-page="contact">Kontak</a>
+</nav>
+
+<main>
+    <div class="card" id="content"></div>
+</main>
+
+<footer>
+    &copy; 2026 Mr.Xedra
+</footer>
+
+<script>
+const content = document.getElementById('content');
+
+// Konten halaman SPA
+const pages = {
+    home: `
+        <h2>Selamat Datang!</h2>
+        <p>Klik tombol di bawah untuk melihat emoji meriah!</p>
+        <button id="emojiBtn">🎉 Klik Aku!</button>
+    `,
+    about: `
+        <h2>Tentang Mr.Xedra</h2>
+        <p>Halo! Aku Mr.Xedra, pelajar SMP yang belajar membuat website interaktif. 😎</p>
+    `,
+    contact: `
+        <h2>Kontak Mr.Xedra</h2>
+        <p>Email: ××××××××</p>
+        <p>Telepon: 0××××××</p>
+        <p>Atau langsung chat ke grup WhatsApp-ku:</p>
+        <a href="https://chat.whatsapp.com/EYwibodb92GDokk4nW1x4W" target="_blank">
+            <button>💬 Chat di WhatsApp</button>
+        </a>
+    `
+};
+
+// Fungsi load halaman
+function loadPage(page) {
+    content.innerHTML = pages[page] || pages.home;
+
+    // Jika halaman home, aktifkan tombol emoji meriah
+    const btn = document.getElementById('emojiBtn');
+    if (btn) {
+        const emojis = ['🎉','😎','🚀','✨','💥','🤩','🔥','🌟'];
+        btn.addEventListener('click', (e) => {
+            const numberOfEmojis = 5; // jumlah emoji per klik
+            const rect = btn.getBoundingClientRect();
+            for(let i=0; i<numberOfEmojis; i++){
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                const span = document.createElement('span');
+                span.textContent = randomEmoji;
+                span.className = 'flying-emoji';
+                
+                // Posisi random di sekitar tombol
+                const offsetX = (Math.random() - 0.5) * rect.width;
+                span.style.left = rect.left + rect.width/2 + offsetX + 'px';
+                span.style.top = rect.top + 'px';
+                
+                document.body.appendChild(span);
+                setTimeout(()=>{ span.remove(); },1500);
+            }
+        });
+    }
+}
+
+// Load halaman awal
+loadPage('home');
+
+// Event klik menu
+document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+        const page = e.target.dataset.page;
+        loadPage(page);
+    });
+});
+</script>
+
+</body>
+</html>
